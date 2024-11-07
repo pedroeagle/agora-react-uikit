@@ -15,7 +15,7 @@ import PropsContext, {
   CallbacksInterface
 } from './PropsContext'
 import { MaxUidProvider } from './MaxUidContext'
-import AgoraRTC, { createClient, ILocalVideoTrack, UID } from 'agora-rtc-react'
+import AgoraRTC, { createClient, ILocalVideoTrack, ILocalAudioTrack, UID } from 'agora-rtc-react'
 import { MinUidProvider } from './MinUidContext'
 import TracksContext from './TracksContext'
 import reducer, { initState } from './Reducer'
@@ -34,6 +34,7 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
 ) => {
   const uid = useRef<UID>()
   const screenTrack = useRef<ILocalVideoTrack>()
+  const internalAudioTrack = useRef<ILocalAudioTrack>()
   const isScreensharingRef = useRef<boolean>(false)
   const { localVideoTrack, localAudioTrack } = useContext(TracksContext)
   const { callbacks, rtcProps } = useContext(PropsContext)
@@ -421,9 +422,11 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
         type: 'Screensharing',
         value: [true]
       })
-      screenTrack.current = await AgoraRTC.createScreenVideoTrack({}, 'disable')
+      const screenVideoTrack = await AgoraRTC.createScreenVideoTrack({}, 'enable')
+      screenTrack.current = screenVideoTrack?.[0]
+      internalAudioTrack.current = screenVideoTrack?.[1]
       const uid = rtcProps.screenshareUid || 1 // 1 is default
-      mediaStore.current[uid] = { videoTrack: screenTrack.current }
+      mediaStore.current[uid] = { videoTrack: screenTrack.current, audioTrack: internalAudioTrack.current }
       screenTrack.current.on('track-ended', () => {
         isScreensharingRef.current = false
         dispatch({
