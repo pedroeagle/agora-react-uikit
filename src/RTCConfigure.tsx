@@ -428,7 +428,7 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
         value: [true]
       })
       const screenVideoTrack = await AgoraRTC.createScreenVideoTrack(
-        {},
+        { optimizationMode: 'detail' },
         'enable'
       )
       screenTrack.current = screenVideoTrack?.[0]
