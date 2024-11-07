@@ -1,9 +1,14 @@
-import AgoraRTC, { ILocalVideoTrack, UID } from 'agora-rtc-react'
+import AgoraRTC, {
+  ILocalAudioTrack,
+  ILocalVideoTrack,
+  UID
+} from 'agora-rtc-react'
 
 const startScreenshare = async (
   appId: string,
   channel: string,
   track: ILocalVideoTrack,
+  audio: ILocalAudioTrack,
   screenshareToken?: string | null,
   screenshareUid?: number,
   tokenUrl?: string,
@@ -86,6 +91,7 @@ const startScreenshare = async (
         await screenClient.publish([track]).then(() => {
           localVideoTrackHasPublished = true
         })
+        await screenClient.publish([audio])
       }
     }
   }
