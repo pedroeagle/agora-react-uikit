@@ -103,7 +103,9 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
         client.on('user-published', async (...args) => {
           // Get current peer IDs
           const [remoteUser, mediaType] = args
-          console.log('user-published', remoteUser.uid)
+          console.log('### USER PUBLISHED ###')
+          console.log({ args, props, client, rtcProps })
+
           if (
             (remoteUser.uid === props.screenshareUid &&
               isScreensharingRef.current) ||
@@ -344,7 +346,11 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
 
   // update local state if tracks are not null
   useEffect(() => {
-    if (localVideoTrack && localAudioTrack !== (null && undefined)) {
+    if (
+      localVideoTrack &&
+      localAudioTrack !== null &&
+      localAudioTrack !== undefined
+    ) {
       mediaStore.current[0] = {
         audioTrack: localAudioTrack,
         videoTrack: localVideoTrack
@@ -361,7 +367,7 @@ const RtcConfigure: React.FC<PropsWithChildren<Partial<RtcPropsInterface>>> = (
     if (channelJoined && rtcProps.token) {
       client
         .renewToken(rtcProps.token)
-        .then((e) => console.log('renewed token', e))
+        .then((e) => console.log('##renewed token##', e))
     }
   }, [rtcProps.token, channelJoined])
 

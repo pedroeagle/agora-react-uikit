@@ -47,7 +47,10 @@ const AgoraUIKit: React.FC<PropsInterface> = (props) => {
 export const VideocallUI = () => {
   const { rtcProps } = useContext(PropsContext)
   return (
-    <RtcConfigure callActive={rtcProps.callActive}>
+    <RtcConfigure
+      callActive={rtcProps.callActive}
+      screenshareUid={rtcProps.screenshareUid}
+    >
       <LocalUserContext>
         {rtcProps.disableRtm ? (
           <React.Fragment>
